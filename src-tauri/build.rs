@@ -365,7 +365,11 @@ fn build_apple_intelligence_bridge() {
     // Check if the SDK supports FoundationModels (required for Apple Intelligence)
     let framework_path =
         Path::new(&sdk_path).join("System/Library/Frameworks/FoundationModels.framework");
-    let has_foundation_models = framework_path.exists();
+    // ECHO: always build the stub. The real bridge needs full Xcode (the
+    // FoundationModelsMacros compiler plugin is missing from Command Line Tools),
+    // and ECHO's polish layer runs through Ollama, never Apple Intelligence.
+    let _ = framework_path;
+    let has_foundation_models = false;
 
     let source_file = if has_foundation_models {
         println!("cargo:warning=Building with Apple Intelligence support.");
